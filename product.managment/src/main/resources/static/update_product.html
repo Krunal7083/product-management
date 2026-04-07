@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Product</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #fff;
+      padding: 25px;
+      width: 360px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .btn-update {
+      background: #28a745;
+    }
+
+    .btn-update:hover {
+      background: #218838;
+    }
+
+    .btn-back {
+      background: #6c757d;
+    }
+
+    .btn-back:hover {
+      background: #5a6268;
+    }
+
+    #msg {
+      text-align: center;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>Update Product</h2>
+
+  <input type="number" id="id" placeholder="Product ID" required>
+  <input type="text" id="name" placeholder="Product Name">
+  <input type="text" id="description" placeholder="Description">
+  <input type="number" id="price" placeholder="Price">
+  <input type="text" id="photoUrl" placeholder="Photo URL">
+
+  <button class="btn-update" onclick="updateProduct()">Update</button>
+
+  <div id="msg"></div>
+
+  <button class="btn-back" onclick="goBack()">⬅ Go Back</button>
+</div>
+
+<script>
+  function updateProduct() {
+    const product = {
+      id: Number(document.getElementById("id").value),
+      name: document.getElementById("name").value,
+      description: document.getElementById("description").value,
+      price: Number(document.getElementById("price").value),
+      photoUrl: document.getElementById("photoUrl").value
+    };
+
+    if (!product.id) {
+      document.getElementById("msg").innerText = "⚠️ ID is required";
+      return;
+    }
+
+    fetch("http://localhost:9090/updateProduct", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(product)
+    })
+    .then(res => {
+      if (!res.ok) throw new Error();
+      return res.text();
+    })
+    .then(data => {
+      document.getElementById("msg").innerText = "✅ Product Updated!";
+    })
+    .catch(() => {
+      document.getElementById("msg").innerText = "❌ Update Failed!";
+    });
+  }
+
+  function goBack() {
+    window.history.back();
+  }
+</script>
+
+</body>
+</html>

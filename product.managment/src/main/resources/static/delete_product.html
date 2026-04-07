@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delete Product</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f8f9fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: white;
+      padding: 25px;
+      width: 320px;
+      border-radius: 10px;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #c82333;
+    }
+
+    #msg {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2>Delete Product</h2>
+  <a class="btn-link" href="product_management.html">Back</a>
+
+  <input type="number" id="prodId" placeholder="Enter Product ID">
+
+  <button onclick="deleteProduct()">Delete</button>
+
+  <div id="msg"></div>
+</div>
+
+<script>
+function deleteProduct() {
+	  const id = document.getElementById("prodId").value;
+
+	  if (!id) {
+	    alert("Enter Product ID");
+	    return;
+	  }
+
+	  fetch(`http://localhost:9090/deleteProduct/${id}`, {
+	    method: "DELETE"
+	  })
+	  .then(res => res.text())
+	  .then(data => {
+	    alert(data);  // shows backend message
+	  })
+	  .catch(err => {
+	    console.error(err);
+	    alert("Error deleting product");
+	  });
+	}
+</script>
+
+
+</body>
+</html>
