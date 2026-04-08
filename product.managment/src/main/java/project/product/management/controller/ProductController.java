@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import project.product.management.dto.ProductRequestDto;
 import project.product.management.entity.Product;
 import project.product.management.service.ProductService;
 
@@ -22,7 +23,7 @@ public class ProductController {
 		this.service = service;
 	}
     @PostMapping("/addProduct")
-	public String addProduct(@RequestBody Product prod) {
+	public String addProduct(@RequestBody ProductRequestDto prod) {
 		 
 	return service.addProduct(prod);
 }
