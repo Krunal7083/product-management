@@ -1,130 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Update Product</title>
-
-  <style>
-    body {
-      font-family: Arial;
-      background: #f4f6f9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-
-    .box {
-      background: #fff;
-      padding: 25px;
-      width: 360px;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      color: white;
-    }
-
-    .btn-update {
-      background: #28a745;
-    }
-
-    .btn-update:hover {
-      background: #218838;
-    }
-
-    .btn-back {
-      background: #6c757d;
-    }
-
-    .btn-back:hover {
-      background: #5a6268;
-    }
-
-    #msg {
-      text-align: center;
-      margin-top: 10px;
-      font-weight: bold;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Update Product</title>
+    <style>
+        * { box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { margin: 0; background: #f8fafc; }
+        header {
+            background: #0f172a;
+            color: white;
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-link {
+            text-decoration: none;
+            background: #2563eb;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .container {
+            width: 90%;
+            max-width: 650px;
+            margin: 35px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-weight: bold; }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        textarea { min-height: 90px; resize: vertical; }
+        button {
+            background: #0ea5e9;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .message {
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #e0f2fe;
+            color: #075985;
+            font-weight: bold;
+        }
+    </style>
 </head>
-
 <body>
+    <header>
+        <h1>Update Product</h1>
+        <a class="btn-link" href="product_management.html">Back</a>
+    </header>
 
-<div class="box">
-  <h2>Update Product</h2>
+    <div class="container">
+        <div class="form-group">
+            <label>Product ID</label>
+            <input type="number" id="id" />
+        </div>
 
-  <input type="number" id="id" placeholder="Product ID" required>
-  <input type="text" id="name" placeholder="Product Name">
-  <input type="text" id="description" placeholder="Description">
-  <input type="number" id="price" placeholder="Price">
-  <input type="text" id="photoUrl" placeholder="Photo URL">
+        <div class="form-group">
+            <label>Name</label>
+            <input type="text" id="name" />
+        </div>
 
-  <button class="btn-update" onclick="updateProduct()">Update</button>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea id="description"></textarea>
+        </div>
 
-  <div id="msg"></div>
+        <div class="form-group">
+            <label>Price</label>
+            <input type="number" id="price" />
+        </div>
 
-  <button class="btn-back" onclick="goBack()">⬅ Go Back</button>
-</div>
+        <div class="form-group">
+            <label>Photo URL</label>
+            <input type="text" id="photoUrl" />
+        </div>
 
-<script>
-  function updateProduct() {
-    const product = {
-      id: Number(document.getElementById("id").value),
-      name: document.getElementById("name").value,
-      description: document.getElementById("description").value,
-      price: Number(document.getElementById("price").value),
-      photoUrl: document.getElementById("photoUrl").value
-    };
+        <button onclick="updateProduct()">Update Product</button>
 
-    if (!product.id) {
-      document.getElementById("msg").innerText = "⚠️ ID is required";
-      return;
-    }
+        <div id="messageArea"></div>
+    </div>
 
-    fetch("http://localhost:9090/updateProduct", {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(product)
-    })
-    .then(res => {
-      if (!res.ok) throw new Error();
-      return res.text();
-    })
-    .then(data => {
-      document.getElementById("msg").innerText = "✅ Product Updated!";
-    })
-    .catch(() => {
-      document.getElementById("msg").innerText = "❌ Update Failed!";
-    });
-  }
+    <script>
+        async function updateProduct() {
+            const product = {
+                id: parseInt(document.getElementById("id").value),
+                name: document.getElementById("name").value,
+                description: document.getElementById("description").value,
+                price: parseInt(document.getElementById("price").value),
+                photoUrl: document.getElementById("photoUrl").value
+            };
 
-  function goBack() {
-    window.history.back();
-  }
-</script>
+            const response = await fetch("/updateProduct", {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(product)
+            });
 
+            const result = await response.text();
+
+            document.getElementById("messageArea").innerHTML =
+                `<div class="message">${result}</div>`;
+        }
+    </script>
 </body>
 </html>
